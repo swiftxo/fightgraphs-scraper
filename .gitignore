@@ -60,4 +60,8 @@ venv.bak/
 *.swo
 
 # Jupyter Notebook
-.ipynb_checkpointsˆ
+.ipynb_checkpoint
+
+
+.DS_Store
+**/.DS_Store

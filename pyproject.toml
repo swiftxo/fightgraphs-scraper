@@ -45,7 +45,9 @@ dependencies = [
     "typing-extensions (==4.14.0)",
     "urllib3 (==2.5.0)",
     "w3lib (==2.3.1)",
-    "zope-interface (==7.2)"
+    "zope-interface (==7.2)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "pymongo (>=4.13.2,<5.0.0)"
 ]
 
 
