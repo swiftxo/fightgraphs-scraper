@@ -7,6 +7,9 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+
+import os
+from dotenv import load_dotenv
 BOT_NAME = "ufcstats_scraper"
 
 SPIDER_MODULES = ["ufcstats_scraper.spiders"]
@@ -14,13 +17,25 @@ NEWSPIDER_MODULE = "ufcstats_scraper.spiders"
 
 ADDONS = {}
 
+load_dotenv()
+
+
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = "ufcstats_scraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
 
+MONGODB_URI = os.getenv("MONGODB_URI")
+MONGODB_DATABASE= os.getenv("MONGODB_DATABASE")
+CONCURRENT_REQUESTS = int(os.getenv("CONCURRENT_REQUESTS"))
+CONCURRENT_REQUESTS_PER_DOMAIN = int(os.getenv("CONCURRENT_REQUESTS_PER_DOMAIN"))
+ROBOTSTXT_OBEY = os.getenv("ROBOTSTXT_OBEY")
+
+ITEM_PIPELINES = {
+	"ufcstats_scraper.pipelines.MongoDataLakePipeline": 300,
+}
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
 

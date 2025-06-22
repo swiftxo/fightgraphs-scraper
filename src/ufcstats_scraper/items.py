@@ -19,3 +19,16 @@ class EventItem(scrapy.Item):
     event_location = scrapy.Field()
     event_status = scrapy.Field()
     fight_refs = scrapy.Field()
+
+class FighterItem(scrapy.Item):
+    fighter_ufcstats_url = scrapy.Field()
+    first_name = scrapy.Field()
+    last_name = scrapy.Field()
+    nickname = scrapy.Field()
+    height = scrapy.Field()
+    weight = scrapy.Field()
+    reach = scrapy.Field()
+    stance = scrapy.Field()
+    fighter_record = scrapy.Field()
+    date_of_birth = scrapy.Field()
+    fight_urls = scrapy.Field()
