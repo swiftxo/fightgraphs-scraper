@@ -47,6 +47,7 @@ class EventSpider(scrapy.Spider):
             if fight_ufcstats_url:
                 fight_refs.append((fight_ufcstats_url, card_position))
         event_item["fight_refs"] = fight_refs
+        yield event_item
 
 
 
