@@ -45,14 +45,6 @@ class EventSpider(scrapy.Spider):
         for card_position, row in enumerate(rows):
             fight_ufcstats_url = row.xpath("@data-link").get()
             if fight_ufcstats_url:
-                fight_refs.append((fight_ufcstats_url, card_position))
+                fight_refs.append((fight_ufcstats_url, str(card_position)))
         event_item["fight_refs"] = fight_refs
         yield event_item
-
-
-
-
-            
-
-        
-            
