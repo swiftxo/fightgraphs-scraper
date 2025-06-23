@@ -1,4 +1,5 @@
 import scrapy
+import time
 
 from ufcstats_scraper.items import FighterItem
 from ufcstats_scraper.utils import clean_text
@@ -15,6 +16,15 @@ class FighterSpider(scrapy.Spider):
     row_xpath = "//tbody/tr[@class='b-statistics__table-row' and not(td[@class='b-statistics__table-col_type_clear'])]"
 
     def start_requests(self):
+        self.logger.info(
+            "Spider started",
+            extra={
+                "event": "spider_started",
+                "spider": self.name,
+                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            }
+        )
+
         for char in self.char_range:
             yield scrapy.Request(
                 url=self.url_template.format(char=char, page_num=self.start_page),
@@ -23,9 +33,23 @@ class FighterSpider(scrapy.Spider):
             )
 
     def parse(self, response, char, page_num):
+        start_time = time.time()
+
         rows = response.xpath(self.row_xpath)
         if not rows:
+            self.logger.info(
+                f"No rows found on page {page_num} for char {char}",
+                extra={
+                    "event": "no_rows_found",
+                    "spider": self.name,
+                    "url": response.url,
+                    "char": char,
+                    "page_num": page_num,
+                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                }
+            )
             return
+
 
         for row in rows:
             fighter_ufcstats_url = clean_text(row.xpath("./td[1]/a/@href").get())
@@ -53,6 +77,22 @@ class FighterSpider(scrapy.Spider):
             request.meta["fighter_item"] = fighter_item
             yield request
 
+        elapsed = int((time.time() - start_time) * 1000)
+        self.logger.info(
+            f"Scraped {len(rows)} fighters from page {page_num} for char {char}",
+            extra={
+                "event": "page_scraped",
+                "spider": self.name,
+                "url": response.url,
+                "char": char,
+                "page_num": page_num,
+                "metrics": {
+                    "fighters_scraped": len(rows),
+                    "response_time_ms": elapsed
+                },
+                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            }
+        )
         next_page = page_num + 1
         yield scrapy.Request(
             url=self.url_template.format(char=char, page_num=next_page),
@@ -60,8 +100,8 @@ class FighterSpider(scrapy.Spider):
             cb_kwargs={"char": char, "page_num": next_page},
         )
 
-    @staticmethod
-    def parse_fighter_details(response):
+
+    def parse_fighter_details(self,response):
 
         fighter_item = response.meta["fighter_item"]
 
@@ -94,5 +134,18 @@ class FighterSpider(scrapy.Spider):
         "date_of_birth": date_of_birth,
         "fight_urls": fight_urls,
         })
+
+        self.logger.info(
+            f"Scraped details for {fighter_item.get('first_name')} {fighter_item.get('last_name')}",
+            extra = {
+            "event": "fighter_details_scraped",
+            "spider": "fighter",
+            "url": response.url,
+            "fighter_name": f"{fighter_item.get('first_name')} {fighter_item.get('last_name')}",
+            "metrics": {
+                "fights_found": len(fight_urls)
+            },
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),}
+        )
 
         yield fighter_item

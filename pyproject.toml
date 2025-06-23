@@ -47,7 +47,9 @@ dependencies = [
     "w3lib (==2.3.1)",
     "zope-interface (==7.2)",
     "pydantic (>=2.11.7,<3.0.0)",
-    "pymongo (>=4.13.2,<5.0.0)"
+    "pymongo (>=4.13.2,<5.0.0)",
+    "python-logstash-async (>=4.0.2,<5.0.0)",
+    "python-logstash (>=0.4.8,<0.5.0)"
 ]
 
 

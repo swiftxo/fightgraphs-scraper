@@ -14,6 +14,3 @@ def format_date(date_str):
         return datetime.strptime(date_str, "%B %d, %Y").strftime("%Y-%m-%d")
     except ValueError:
         return None
-
-
-

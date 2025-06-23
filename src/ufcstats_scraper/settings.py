@@ -1,15 +1,10 @@
-# Scrapy settings for ufcstats_scraper project
-#
-# For simplicity, this file contains only settings considered important or
-# commonly used. You can find more settings consulting the documentation:
-#
-#     https://docs.scrapy.org/en/latest/topics/settings.html
-#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
-
 import os
 from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
 BOT_NAME = "ufcstats_scraper"
 
 SPIDER_MODULES = ["ufcstats_scraper.spiders"]
@@ -17,24 +12,36 @@ NEWSPIDER_MODULE = "ufcstats_scraper.spiders"
 
 ADDONS = {}
 
-load_dotenv()
-
-
-
-
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = "ufcstats_scraper (+http://www.yourdomain.com)"
-
-# Obey robots.txt rules
-
 MONGODB_URI = os.getenv("MONGODB_URI")
 MONGODB_DATABASE= os.getenv("MONGODB_DATABASE")
+
+
+
+
 CONCURRENT_REQUESTS = int(os.getenv("CONCURRENT_REQUESTS"))
 CONCURRENT_REQUESTS_PER_DOMAIN = int(os.getenv("CONCURRENT_REQUESTS_PER_DOMAIN"))
 ROBOTSTXT_OBEY = os.getenv("ROBOTSTXT_OBEY")
 
+
+LOG_ENABLED = True
+LOGSTASH_HOST = os.getenv("LOGSTASH_HOST")
+LOGSTASH_PORT = os.getenv("LOGSTASH_PORT")
+LOG_LEVEL = 'INFO'
+
+
+
 ITEM_PIPELINES = {
 	"ufcstats_scraper.pipelines.MongoDataLakePipeline": 300,
+}
+
+SPIDER_MIDDLEWARES = {
+    'ufcstats_scraper.middlewares.LogstashLoggerMiddleware': 50, # Adjust priority as needed
+    'ufcstats_scraper.middlewares.UfcstatsScraperSpiderMiddleware': 543, # Adjust priority
+}
+
+# Downloader Middlewares
+DOWNLOADER_MIDDLEWARES = {
+    'ufcstats_scraper.middlewares.UfcstatsScraperDownloaderMiddleware': 543, # Adjust priority
 }
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32
