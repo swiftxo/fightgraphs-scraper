@@ -46,10 +46,6 @@ class FightSpider(scrapy.Spider):
                 ).get()
             )
 
-        fighter_xpath = "//div[@class='b-fight-details__persons clearfix']/div[@class='b-fight-details__person']"
-        for i in [1, 2]:
-            xpath = f"{fighter_xpath}[{i}]"
-
             fight_item[f"fighter{i}"] = {
                 "name": name,
                 "nickname": nickname,
