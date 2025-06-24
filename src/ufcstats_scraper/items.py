@@ -32,3 +32,10 @@ class FighterItem(scrapy.Item):
     fighter_record = scrapy.Field()
     date_of_birth = scrapy.Field()
     fight_urls = scrapy.Field()
+
+class FightItem(scrapy.Item):
+    fight_ufcstats_url = scrapy.Field()
+    fight_details = scrapy.Field()
+    fight_stats = scrapy.Field()
+    fighter1 = scrapy.Field()
+    fighter2 = scrapy.Field()
