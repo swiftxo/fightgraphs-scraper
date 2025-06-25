@@ -42,5 +42,18 @@ def get_fight_urls():
         if "fight_urls" in fighter:
             for fight_url in fighter["fight_urls"]:
                 fight_urls.add(fight_url)
-    client.close()
+
     return list(fight_urls)
+
+
+def get_fighter_collection_items(fields):
+    """
+    Retrieve specified fields from all documents in the fighters collection.
+    :param fields: List of field names to retrieve, e.g. ['name', 'fight_urls']
+    :return: List of dicts with only the requested fields
+    """
+    projection = {field: 1 for field in fields}
+    projection["_id"] = 0
+    items = list(db["fighters"].find({}, projection))
+
+    return items

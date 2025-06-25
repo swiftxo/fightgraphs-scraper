@@ -67,11 +67,9 @@ class MongoDataLakePipeline:
             "EventItem": "events",
             "FighterItem": "fighters",
             "FightItem": "fights",
-            "HeroItem": "heroes",
-            "StatsItem": "stats",
+            "FighterImageItem": "fighter_images",
         }
         try:
             return collection_map[item_type]
         except KeyError:
             raise DropItem(f"Unknown item type: {item_type}")
-

@@ -12,6 +12,11 @@ class UfcstatsScraperItem(scrapy.Item):
     pass
 
 
+class FighterImageItem(scrapy.Item):
+    fighter_ufcstats_url = scrapy.Field()
+    fighter_image_url = scrapy.Field()
+
+
 class EventItem(scrapy.Item):
     event_name = scrapy.Field()
     event_ufcstats_url = scrapy.Field()
@@ -19,6 +24,7 @@ class EventItem(scrapy.Item):
     event_location = scrapy.Field()
     event_status = scrapy.Field()
     fight_refs = scrapy.Field()
+
 
 class FighterItem(scrapy.Item):
     fighter_ufcstats_url = scrapy.Field()
@@ -32,6 +38,7 @@ class FighterItem(scrapy.Item):
     fighter_record = scrapy.Field()
     date_of_birth = scrapy.Field()
     fight_urls = scrapy.Field()
+
 
 class FightItem(scrapy.Item):
     fight_ufcstats_url = scrapy.Field()
